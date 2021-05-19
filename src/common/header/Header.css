@@ -31,6 +31,21 @@
       top: 0;
       left: 0;
     }
+    .tabs {
+      margin-bottom: 20px;
+  }
+  
+  .dispNone {
+      display: none;
+  }
+  
+  .dispBlock {
+      display: block;
+  }
+  
+  .red {
+      color: red;
+  }
   
     @keyframes tt {
       from { transform: scaleX(-1); }
