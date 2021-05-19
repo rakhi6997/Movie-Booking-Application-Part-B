@@ -2,6 +2,7 @@ import react from "react";
 import "./Header.css";
 import logo from "../../assets/logo.svg";
 import { Button } from "@material-ui/core";
+import {Link} from "react-router-dom"
 
 class Header extends react.Component {
   render() {
@@ -18,11 +19,15 @@ class Header extends react.Component {
           </Button>
         </div>
 
-        <div className="bookshow-button">
-          <Button variant="contained" color="primary">
-            Book Show
-          </Button>
-        </div>
+        {this.props.showBookShowButton === "true" ?
+                        <div className="bookshow-button">
+                            <Link to={"/bookshow/" + this.props.id}>
+                                <Button variant="contained" color="primary">
+                                    Book Show
+                                </Button>
+                            </Link>
+                        </div>
+                        : ""}
       </div>
     );
   }
