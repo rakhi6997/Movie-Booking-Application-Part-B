@@ -1,8 +1,7 @@
-import react from "react";
 import React, { Component } from "react";
 import "./Header.css";
+import Button from "@material-ui/core/Button";
 import logo from "../../assets/logo.svg";
-
 import Modal from "react-modal";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -37,7 +36,7 @@ TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-class Header extends react.Component {
+class Header extends Component {
   constructor() {
     super();
     this.state = {
@@ -57,6 +56,8 @@ class Header extends react.Component {
       registerPassword: "",
       contactRequired: "dispNone",
       contact: "",
+      registrationSuccess: false,
+      loggedIn: sessionStorage.getItem("access-token") == null ? false : true,
     };
   }
 
@@ -78,8 +79,6 @@ class Header extends react.Component {
       registerPassword: "",
       contactRequired: "dispNone",
       contact: "",
-      registrationSuccess: false,
-      loggedIn: sessionStorage.getItem("access-token") == null ? false : true,
     });
   };
 
@@ -98,7 +97,8 @@ class Header extends react.Component {
     this.state.loginPassword === ""
       ? this.setState({ loginPasswordRequired: "dispBlock" })
       : this.setState({ loginPasswordRequired: "dispNone" });
-      let dataLogin = null;
+
+    let dataLogin = null;
     let xhrLogin = new XMLHttpRequest();
     let that = this;
     xhrLogin.addEventListener("readystatechange", function () {
@@ -152,25 +152,25 @@ class Header extends react.Component {
     this.state.contact === ""
       ? this.setState({ contactRequired: "dispBlock" })
       : this.setState({ contactRequired: "dispNone" });
-      const registerPayload = {
-        email_address: this.state.lastname,
-        first_name: this.state.firstname,
-        last_name: this.state.lastname,
-        mobile_number: this.state.contact,
-        password: this.state.registerPassword,
-      };
-      const requestOptions = {
-        method: "POST",
-  
-        body: JSON.stringify(registerPayload),
-      };
-      fetch("http://localhost:8085/api/v1/signup/", requestOptions)
-        .then((response) => response.json())
-        .then((data) =>
-          this.setState({
-            registrationSuccess: true,
-          })
-        );
+    const registerPayload = {
+      email_address: this.state.lastname,
+      first_name: this.state.firstname,
+      last_name: this.state.lastname,
+      mobile_number: this.state.contact,
+      password: this.state.registerPassword,
+    };
+    const requestOptions = {
+      method: "POST",
+      
+      body: JSON.stringify(registerPayload),
+    };
+    fetch("http://localhost:8085/api/v1/signup/", requestOptions)
+      .then((response) => response.json())
+      .then((data) =>
+        this.setState({
+          registrationSuccess: true,
+        })
+      );
   };
 
   inputFirstNameChangeHandler = (e) => {
@@ -191,15 +191,17 @@ class Header extends react.Component {
 
   inputContactChangeHandler = (e) => {
     this.setState({ contact: e.target.value });
-    logoutHandler = (e) => {
-      sessionStorage.removeItem("uuid");
-      sessionStorage.removeItem("access-token");
-  
-      this.setState({
-        loggedIn: false,
-      });
-    };
   };
+
+  logoutHandler = (e) => {
+    sessionStorage.removeItem("uuid");
+    sessionStorage.removeItem("access-token");
+
+    this.setState({
+      loggedIn: false,
+    });
+  };
+
   render() {
     return (
       <div>
@@ -235,7 +237,7 @@ class Header extends react.Component {
               >
                 Book Show
               </Button>
-              </div>
+            </div>
           ) : (
             ""
           )}
